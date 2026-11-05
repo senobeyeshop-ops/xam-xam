@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>XamXam Bac — Tuteur IA de maths</title>
+  <meta name="description" content="Maîtrise le programme de maths de Terminale (L, S1/S3, S2/S4) avec un tuteur IA socratique." />
+  <meta name="theme-color" content="#0f3d2e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- AUTH -->
+  <section id="view-auth" class="view">
+    <div class="auth-wrap">
+      <div class="auth-hero">
+        <div class="logo">Xam<span>Xam</span> Bac</div>
+        <h1>Le tuteur qui te pose les bonnes questions.</h1>
+        <p>Un cours particulier interactif sur tout le programme officiel de maths de Terminale — séries L, S1/S3 et S2/S4. Explications, questions socratiques, exercices, mini-quiz et défi final type Bac.</p>
+        <ul class="perks">
+          <li>📘 Programmes de l'Office du Bac</li>
+          <li>🧠 Méthode socratique pas à pas</li>
+          <li>📈 Ta progression sauvegardée</li>
+        </ul>
+      </div>
+      <form id="auth-form" class="card auth-card">
+        <div class="tabs" role="tablist">
+          <button type="button" class="tab active" data-mode="login">Connexion</button>
+          <button type="button" class="tab" data-mode="signup">Inscription</button>
+        </div>
+        <div class="signup-only">
+          <label>Prénom<input name="prenom" autocomplete="given-name" /></label>
+          <label>Série
+            <select name="serie">
+              <option value="L">Terminale L</option>
+              <option value="S1S3">Terminale S1 / S3</option>
+              <option value="S2S4" selected>Terminale S2 / S4</option>
+            </select>
+          </label>
+        </div>
+        <label>Email<input name="email" type="email" required autocomplete="email" /></label>
+        <label>Mot de passe<input name="password" type="password" required minlength="6" autocomplete="current-password" /></label>
+        <button class="btn primary" type="submit" id="auth-submit">Se connecter</button>
+        <p class="msg" id="auth-msg"></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- TABLEAU DE BORD -->
+  <section id="view-dash" class="view hidden">
+    <header class="topbar">
+      <div class="logo small">Xam<span>Xam</span> Bac</div>
+      <div class="top-right"><span id="hello"></span><button class="btn ghost" id="logout">Déconnexion</button></div>
+    </header>
+    <main class="dash">
+      <div class="dash-head">
+        <h2>Que veux-tu maîtriser aujourd'hui ?</h2>
+        <div class="series" id="series-tabs"></div>
+      </div>
+      <p class="serie-esprit" id="serie-esprit"></p>
+      <div id="chapters" class="grid"></div>
+
+      <div class="card free">
+        <h3>Ou un sujet libre</h3>
+        <p>Le tuteur suit la même méthode pour n'importe quel thème (ex. « méthode de dissertation », « les probabilités conditionnelles en médecine »).</p>
+        <form id="free-form" class="row">
+          <input id="free-input" placeholder="Quel sujet souhaites-tu apprendre ?" required />
+          <button class="btn primary">Commencer</button>
+        </form>
+      </div>
+
+      <h3 class="section-title">Mes cours en cours</h3>
+      <div id="my-sessions" class="list"></div>
+    </main>
+  </section>
+
+  <!-- COURS -->
+  <section id="view-chat" class="view hidden">
+    <header class="topbar">
+      <button class="btn ghost" id="back">← Retour</button>
+      <div class="chat-title" id="chat-title"></div>
+      <button class="btn ghost" id="toggle-plan">Programme</button>
+    </header>
+    <div class="chat-layout">
+      <aside class="plan" id="plan">
+        <h4>Programme</h4>
+        <div class="progress"><div id="progress-bar"></div></div>
+        <p class="muted" id="progress-text"></p>
+        <ol id="plan-list"></ol>
+        <div class="stage" id="stage"></div>
+      </aside>
+      <div class="chat">
+        <div id="messages" class="messages"></div>
+        <div class="quick" id="quick">
+          <button data-q="Oui, je suis prêt(e), on continue !">✅ Je continue</button>
+          <button data-q="Non, je n'ai pas bien compris. Peux-tu reformuler avec un autre exemple ?">🔁 Réexplique</button>
+          <button data-q="Donne-moi un indice, s'il te plaît.">💡 Un indice</button>
+          <button data-q="Fais-moi un mini-quiz sur ce qu'on vient de voir.">📝 Mini-quiz</button>
+        </div>
+        <form id="chat-form" class="composer">
+          <textarea id="chat-input" rows="1" placeholder="Ta réponse… (maths : x^2, sqrt(x), ln(x))"></textarea>
+          <button class="btn primary" id="send">Envoyer</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+  <script src="config.js"></script>
+  <script src="curriculum.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
