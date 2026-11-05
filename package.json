@@ -1,0 +1,8 @@
+{
+  "name": "xamxam-bac",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Tuteur IA socratique sur les programmes de maths de Terminale (Sénégal)",
+  "scripts": { "build": "node scripts/build-config.mjs" }
+}
